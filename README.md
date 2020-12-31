@@ -68,3 +68,9 @@
 | webpack-bundle-analyzer         | Generate report of what's in the app's production bundle         |
 | webpack-cli                     | Run Webpack via the command line                                 |
 | webpack-dev-server              | Serve app via Webpack                                            |
+
+# Notes
+
+> When you notice that some components don't use props they receive but merely forward them down...it's a good time to introduce some container components.
+>
+> -- <cite>Dan Abramov</cite>
