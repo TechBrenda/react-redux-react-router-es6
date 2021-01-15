@@ -74,3 +74,21 @@
 > When you notice that some components don't use props they receive but merely forward them down...it's a good time to introduce some container components.
 >
 > -- <cite>Dan Abramov</cite>
+
+## Increasing complexity of state
+
+1. Start with state in a single component.
+2. Lift state as needed (lowest common parent).
+3. Try Context or Redux when lifting state gets annoying.
+
+## Redux 3 Principles
+
+1. One immutable store.
+2. Actions trigger changes.
+3. Reducers update state.
+
+Every update replaces state with entirely new state. Clearly define each action to do one thing - no side effects. Reducers are pure functions. A pure function is one that accepts the current state and an action, then returns a new state.
+
+Data flows down. Actions flow up.
+
+In Redux, state changing logic is handled by reducers. Reducers can be nested via functional composition, the same way that React can nest components. By nesting reducers, Redux keeps a unified state that is the single source of truth (no data duplication).
