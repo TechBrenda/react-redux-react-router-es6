@@ -87,8 +87,34 @@
 2. Actions trigger changes.
 3. Reducers update state.
 
-Every update replaces state with entirely new state. Clearly define each action to do one thing - no side effects. Reducers are pure functions. A pure function is one that accepts the current state and an action, then returns a new state.
+Every update replaces state with entirely new state. Clearly define each action to do one thing - no side effects. Reducers are pure functions - it accepts the current state and an action, then returns a new state. A pure function is one that produces the same output every time given the same input.
 
 Data flows down. Actions flow up.
 
 In Redux, state changing logic is handled by reducers. Reducers can be nested via functional composition, the same way that React can nest components. By nesting reducers, Redux keeps a unified state that is the single source of truth (no data duplication).
+
+All reducers are called on each dispatch. That is why each reducer returns state. If the reducer does not handle the action that is dispatched, then it only returns the state parameter. Each reducer is only passed its slice of state.
+
+> Write independent small reducer functions that are each responsible for updates to a specific slice of state. We call this pattern "reducer composition". A given action could be handled by all, some, or none of them."
+>
+> --<cite>Redux FAQ</cite>
+
+## Shallow Copy versus Deep Clone
+
+Object.assign and spread operator both only copy the reference to the top level of objects and arrays. Merging tools like clonedeep or lodash.merge, or a cheap hack like JSON.parse(JSON.stringify(obj)) will make a complete copy without reusing any references.
+
+However, only the data that changes needs a copy. If you deep clone everything, it would cause unnecessary renders.
+
+Redux state would never need a deep copy of the whole state, only a property that has nested properties that need changing.
+
+## Recommendations to ensure immutability
+
+In development (definitely not in production), use redux-immutable-state-invariant to warn when code is mutating state.
+
+Use librarys such as Immer or Immutable.js to ensure data is always immutable. These libraries will copy references only when the data is unchanged. Otherwise, they will return a new object.
+
+## Forbidden in Reducers
+
+- Mutate arguments
+- Perform side effects (such as API call)
+- Call non-pure functions
