@@ -118,3 +118,9 @@ Use librarys such as Immer or Immutable.js to ensure data is always immutable. T
 - Mutate arguments
 - Perform side effects (such as API call)
 - Call non-pure functions
+
+## Memoize
+
+Memoization is like caching for function calls. Because pure functions always return the same value for the same parameters, memoization caches the result of a function's initial execution of a set of parameters. If the parameters don't change, then the cached result may be used instead of running the function again. This is how it optimizes performance of functions with long execution time.
+
+https://codeburst.io/understanding-memoization-in-3-minutes-2e58daf33a19
