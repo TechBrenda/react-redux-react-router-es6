@@ -164,7 +164,9 @@ This looks awesome:
 
 ## Redux Middleware
 
-Redux middleware is a way to enhance Redux's behavior. Multiple middleware are combined with the Redux compose function.
+Redux middleware is a way to enhance Redux's behavior. Middleware runs between dispatching an action and the action reaching the reducer.
+
+Multiple middleware are combined with the Redux `compose` function.
 
 Middleware is the third parameter of the Redux createStore function. When adding middleware, either single or combined in compose, it must have open and close parenthesis after the middleware function name so that it is instantiated.
 
@@ -177,3 +179,44 @@ When passing Redux state to components with mapStateToProps, only include state 
 mapStateToProps has an optional second parameter "ownProps" which are the props for the component that are not in Redux state.
 
 mapDispatchToProps determines what actions are available on props for a component. If you omit it, the component gets a dispatch prop injected automatically.
+
+## Mock API
+
+A mock API is great for early UI development. It keeps you from being so dependent on having real data and a functioning API set up during early development.
+
+- Start before the API exists (must first agree on shape of data)
+- Independence from API and database development
+- Backup plan in case database or network is down
+- Ultra-fast
+- Test slowness - can use setTimeout to simulate network lag
+- Aids testing since only the API address will change, not the code
+
+Point to the real API later and make adjustments as needed. You don't have to wait on the API to be fully implemented to see if you can develop something in the UI. You can set environment variables to switch between real API and mock API for future development.
+
+Using JSON Server as mock API.
+
+### Scripts
+
+The start:api script runs JSON Server. The prestart:api runs the script that loads mockData.js into db.json. Because of the "pre" prefix, prestart:api will automatically run before start:api.
+
+When running custom npm scripts you need the "run" keyword in the command:
+
+`npm run start:api`
+
+Use `run-p` in a script to run multiple npm scripts in parallel. This command comes with npm-run-all package. Rename the existing start script to "start:dev" then create a new "start" script that runs both start:dev and start:api. Since run-p script uses "start", it doesn't need the "run" keyword.
+
+`npm start`
+
+By using run-p, both processes will output to the same console.
+
+## Thunk
+
+Thunk: a function that wraps an expression to delay its evaluation.
+
+A thunk is a function that returns a function. Thunk is a computer science term, and it not limited to Redux or JavaScript.
+
+Anything impure (side effects) is wrapped in a thunk. Later that thunk will be invoked by middleware to cause the effect. By transferring all side effects to running at the same point in the Redux loop, the rest of the app stays relatively pure.
+
+Redux thunks receive dispatch as the first parameter. A second, optional parameter is getState which can provide conditions for performing the dispatch conditionally.
+
+You can handle actions asynchronously without middleware, but Redux-Thunk passes dispatch in for you. If you didn't use middleware, your components would have to know whether an action is synchronous or asynchronous. When using Thunk middleware, your component code does not have to change, and Thunk adds the dispatch for you.
