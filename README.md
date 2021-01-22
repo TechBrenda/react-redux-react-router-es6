@@ -124,3 +124,56 @@ Use librarys such as Immer or Immutable.js to ensure data is always immutable. T
 Memoization is like caching for function calls. Because pure functions always return the same value for the same parameters, memoization caches the result of a function's initial execution of a set of parameters. If the parameters don't change, then the cached result may be used instead of running the function again. This is how it optimizes performance of functions with long execution time.
 
 https://codeburst.io/understanding-memoization-in-3-minutes-2e58daf33a19
+
+## Intial Redux Setup
+
+1. Create action
+2. Create reducer
+3. Create root reducer
+4. Configure store
+5. Instantiate store
+6. Connect component
+7. Pass props via connect
+8. Dispatch action
+
+### Add feature
+
+1. Create action
+2. Enhance reducer
+3. Connect component
+4. Dispatch action
+
+## Code Saving
+
+When initializing state in class components, you don't have to call the constructor and set this.state. Instead you can just say state = {}. That is because state is already bound to the class so declaring it outside of constructor still allows you to reference this.state.
+
+## Form onSubmit vs Child Button onClick
+
+When creating a form in React, the form component has a prop onSubmit that takes a method for handling the form submittal.
+
+You could instead pass the handleSubmit method to the button (or input of type "submit"). However, only the form onSubmit will associate the enter button on the keyboard with form submittal.
+
+When using the onSubmit prop in form component, the method passed to the prop must call event.preventDefault() first, then include the handling code. Otherwise, submitting the form will reload the page. You don't have to do this step if the handleSubmit method is called from the submit button's onClick prop.
+
+## Normalize Redux State
+
+This looks awesome:
+
+- https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape
+- https://github.com/paularmstrong/normalizr
+
+## Redux Middleware
+
+Redux middleware is a way to enhance Redux's behavior. Multiple middleware are combined with the Redux compose function.
+
+Middleware is the third parameter of the Redux createStore function. When adding middleware, either single or combined in compose, it must have open and close parenthesis after the middleware function name so that it is instantiated.
+
+- reduxImmutableStateInvariant - warns if code attempts to mutate Redux state
+
+## Connect
+
+When passing Redux state to components with mapStateToProps, only include state that you absolutely need. These values are props of the component so any time any these mapped state values change, the component will render again.
+
+mapStateToProps has an optional second parameter "ownProps" which are the props for the component that are not in Redux state.
+
+mapDispatchToProps determines what actions are available on props for a component. If you omit it, the component gets a dispatch prop injected automatically.
