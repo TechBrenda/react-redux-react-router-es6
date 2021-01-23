@@ -220,3 +220,13 @@ Anything impure (side effects) is wrapped in a thunk. Later that thunk will be i
 Redux thunks receive dispatch as the first parameter. A second, optional parameter is getState which can provide conditions for performing the dispatch conditionally.
 
 You can handle actions asynchronously without middleware, but Redux-Thunk passes dispatch in for you. If you didn't use middleware, your components would have to know whether an action is synchronous or asynchronous. When using Thunk middleware, your component code does not have to change, and Thunk adds the dispatch for you.
+
+It is helpful to add a suffix to async actions such as SUCCESS and ERROR so that you can call one action for successful API call and the other for handling an error with the same API call. The base part of the action name would represent the particular API called.
+
+Redux-Thunk is easy to learn, but once you get the hang of it, consider learning a more complex (and more powerful) async library such as Redux-Saga. Saga is very complicated to learn but makes other development tasks easier such as testing.
+
+## Initial State
+
+Instead of declaring the initial state of a reducer in each reducer, consider combining the shape of the initial state into a single file in the reducers folder called initialState.js. Then you can import this file into each reducer and use it to set that reducer's slice of initial state.
+
+Creating a centralized intial state provides a referenced point of data shape that helps new developers on a project find where the data comes from. Since every reducer would reference it, it's easy to find.
