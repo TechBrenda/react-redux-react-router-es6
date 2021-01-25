@@ -386,3 +386,21 @@ In the history method, call `history.push('/path')`. React Router sends history 
 Redux calls a function that searches state to find something a "selector". A good place to declare selectors is in the file with the corresponding reducer.
 
 Selectors should be pure functions and can be memoized.
+
+## Reducers and Actions: Many to Many
+
+Reducers may handle multiple actions. This is typical Redux usage.
+
+Also, actions may be handled by multiple reducers.
+
+Because of the possible many-to-many relationship of actions and reducers, actions and reducers should not be grouped by feature. By having an actions folder and a reducers folder, each reducer only has to go up and down one folder level to get to any action that it needs.
+
+If you instead organize by feature, then you have to root around in each folder to find the actions file that a reducer needs and go through at least one more folder level if not more, depending on how your feature folders would be organized. Trying to segment state by feature is a sign that the feature's data does not belong in the Redux **global** store. Such data may be better organized on the component state level.
+
+## Reducer convention
+
+Define a function that tests a condition about the action type. Then use that function to wrap the action.type to update state for a multitude of action types instead of repeated code for each one.
+
+## Optimistic Update
+
+An optimistic update is when you update the UI before the API call is complete. This can be done for creates, updates, and deletes.
