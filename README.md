@@ -192,7 +192,7 @@ Middleware is the third parameter of the Redux createStore function. When adding
 
 When passing Redux state to components with mapStateToProps, only include state that you absolutely need. These values are props of the component so any time any these mapped state values change, the component will render again.
 
-mapStateToProps has an optional second parameter "ownProps" which are the props for the component that are not in Redux state.
+mapStateToProps has an optional second parameter "ownProps" which are the props for the component that are not in Redux state. Use ownProps when props from other sources affect the Redux state mapped to props.
 
 mapDispatchToProps determines what actions are available on props for a component. If you omit it, the component gets a dispatch prop injected automatically.
 
@@ -345,6 +345,44 @@ The first parameter is the function that does the work. This function would be t
 
 The second parameter of useEffect is an array of variables expected to change within that function. An empty array for the second parameter means the effect will run once when the component mounts.
 
+When useEffect replaces both componentDidMount and componentDidUpdate, it's up to you to put in the logic to distinguish when code executes. When the second parameter array is empty, the first parameter function only runs when the component mounts. When the array contains variables, the function is going to run every time those variables update.
+
 ## Form data belongs in local state
 
 Avoid using Redux for all state. Use plain React state for data only one container component will use (such as form state). Form data is contained to one place like a local scratch pad until it is saved.
+
+Form components send event to onChange prop functions. The event always sends values as strings so if you need the value to be a number, use the appropriate JavaScript method to parse the value before setting it to local state.
+
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat
+
+Handler functions should destructure properties from event.target for use in setState functions which are asynchronous. The event object cannot be accessed from an async function scope. Without this destructuring, you would see an error, "This synthetic event is reused for performance reasons." Also, destructuring properties that are three levels deep enhances readability of code (it's prettier).
+
+## Scope
+
+Code will try to access same named variables in roughly this order:
+
+1. Local
+2. Local (non-Redux) state
+3. Component prop (including Redux mapped state and dispatch)
+4. Component import
+
+This is not an exhaustive list as there are many factors that affect scope, and several ways JavaScript offers to change scope (like a local copy).
+
+If you need a state variable to be named the same as an incoming prop and you are destructuring most of your props, you can use the rest operator to bundle the prop under `props`. At the end of the destructured props list, add `...props`. Any props that you did not destructure will be available in dot format after `props`.
+
+By destructuring variables from props, they become locally scoped variables to the component function/class.
+
+## Redirect with React Router
+
+There are two ways to redirect with React Router.
+
+In the render method, use a boolean value followed by && (JavaScript logical AND) followed by `<Redirect to='/path' />`.
+
+In the history method, call `history.push('/path')`. React Router sends history as a prop so `history` needs to be destructured in props for this to work. Also define prop type as `PropTypes.object.isRequired`. Any component loaded via `<Route>` gets history passed in on props automatically.
+
+## Selectors
+
+Redux calls a function that searches state to find something a "selector". A good place to declare selectors is in the file with the corresponding reducer.
+
+Selectors should be pure functions and can be memoized.
