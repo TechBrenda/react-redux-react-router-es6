@@ -145,7 +145,7 @@ https://codeburst.io/understanding-memoization-in-3-minutes-2e58daf33a19
 
 ## Code Saving
 
-When initializing state in class components, you don't have to call the constructor and set this.state. Instead you can just say state = {}. That is because state is already bound to the class so declaring it outside of constructor still allows you to reference this.state.
+When initializing state in class components, you don't have to call the constructor and assign a value to `this.state`. Instead you can just say `state = {}` at the top level of the class. That is because state is already bound to the class so declaring it outside of constructor still allows you to reference this.state from any class method.
 
 ## Form onSubmit vs Child Button onClick
 
@@ -154,6 +154,22 @@ When creating a form in React, the form component has a prop onSubmit that takes
 You could instead pass the handleSubmit method to the button (or input of type "submit"). However, only the form onSubmit will associate the enter button on the keyboard with form submittal.
 
 When using the onSubmit prop in form component, the method passed to the prop must call event.preventDefault() first, then include the handling code. Otherwise, submitting the form will reload the page. You don't have to do this step if the handleSubmit method is called from the submit button's onClick prop.
+
+## PropTypes
+
+Import PropTypes from the prop-types library.
+
+After the component definition and before the component is exported, define the propTypes property on the component as an object where the props are the field names and the values are `PropTypes.` followed by the field type and optionally followed by `.isRequired`.
+
+Example
+
+```javascript
+CoursesPage.PropTypes = {
+  courses: PropTypes.array.isRequired,
+  authors: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+```
 
 ## Normalize Redux State
 
@@ -230,3 +246,105 @@ Redux-Thunk is easy to learn, but once you get the hang of it, consider learning
 Instead of declaring the initial state of a reducer in each reducer, consider combining the shape of the initial state into a single file in the reducers folder called initialState.js. Then you can import this file into each reducer and use it to set that reducer's slice of initial state.
 
 Creating a centralized intial state provides a referenced point of data shape that helps new developers on a project find where the data comes from. Since every reducer would reference it, it's easy to find.
+
+## Redux component boilerplate
+
+1. Imports
+2. Component
+3. PropTypes
+4. Redux mapping
+   - mapStateToProps
+   - mapDispatchToProps
+5. Export component wrapped in Redux connect function.
+
+## mapDispatchToProps
+
+There are several ways to create mapDispatchToProps. Redux offers a lot of automation for injecting dispatch.
+
+### Function form of mapDispatchToProps
+
+The most concise way to define mapDispatchToProps as a function is to set dispatch as the parameter and use the Redux function `bindActionCreators` to bind action creator functions to dispatch.
+
+Create a file to hold all the action creator functions for a slice of Redux state. This file will export each action creator and have no default export. In the component that uses the action creators, import all the action creators and rename after the file it came from. For example, courseActions.js contains all course action creators. CoursesPage component will import those using the wildcard import format.
+
+`import * as courseActions from '../../redux/actions/courseActions';`
+
+This creates an object with each of the action creator functions as a property of the object.
+
+Also import `bindActionCreators`:
+
+`import { bindActionCreators } from 'redux';`
+
+In mapStateToDispatch, `bindActionCreators` may be used to bind all of the action creators in the imported actions object or a single action creator in the actions object.
+
+#### Bind all action creators
+
+```javascript
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(courseActions, dispatch),
+  };
+};
+```
+
+#### Bind individual action creators
+
+```javascript
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: {
+      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
+    },
+  };
+};
+```
+
+### Object form of mapDispatchToProps
+
+If you declare mapDispatchToProps as an object instead of a function, each property will automatically be bound to dispatch.
+
+This removes a level of object nesting so you will need to update your component props references and PropTypes definition. You also won't need `bindActionCreators`.
+
+The action creators are defined and imported just as in the function form described above.
+
+```javascript
+const mapDispatchToProps = {
+  loadCourses: courseActions.loadCourses,
+};
+```
+
+If you use named imports to import only the action creators that you need, and they are named the same as the prop you define for your component, you can shorten this further.
+
+There is another tweak that allows this mapDispatchToProps format even more concise, but it has a few prerequisites:
+
+- Use named imports instead of wildcard to import only the action creators that you need.
+- The imported action creators are named the same as the props used in the component.
+- None of the imported action creators have the same name as action creators imported from other files. You can override this limitation with the `as` keyword to rename specific imports for the component.
+
+```javascript
+import { loadCourses } from '../../redux/actions/courseActions';
+import { loadAuthors } from '../../redux/actions/authorActions';
+
+const mapDispatchToProps = {
+  loadCourses,
+  loadAuthors,
+};
+```
+
+## Hooks
+
+Hooks allow you to handle state and side effects (think lifecycle methods) in function components.
+
+Once you introduce Hooks to your development, you will prefer functional components over classes. Functions with Hooks are easier to declare and maintain.
+
+## useEffect
+
+The Hook `useEffect` replaces both `componentDidMount` and `componentDidUpdate`.
+
+The first parameter is the function that does the work. This function would be the body of the class componentDid- Mount and Update methods.
+
+The second parameter of useEffect is an array of variables expected to change within that function. An empty array for the second parameter means the effect will run once when the component mounts.
+
+## Form data belongs in local state
+
+Avoid using Redux for all state. Use plain React state for data only one container component will use (such as form state). Form data is contained to one place like a local scratch pad until it is saved.
