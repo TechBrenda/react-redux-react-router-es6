@@ -404,3 +404,70 @@ Define a function that tests a condition about the action type. Then use that fu
 ## Optimistic Update
 
 An optimistic update is when you update the UI before the API call is complete. This can be done for creates, updates, and deletes.
+
+The optimistic delete does not call the beginApiCall or apiCallError action creators because it calls the API directly to handle the delete. Because the delete is optimistic, it removes the course in the UI and assumes that the delete will work correctly in the API. That means there will be no spinner or error message in the UI.
+
+### Optimistic Tradeoff
+
+Pro: Better user experience when call succeeds
+Con: Confusing user experience if call fails
+
+## Predicate
+
+A predicate is a function that returns true or false. Predicates are used in JavaScript array functions like filter where the first parameter of array.filter is a function that returns true if the array element should be in the result array, and returns false if the array element should not be in the result array.
+
+## Toast
+
+Toast may be configured globally. Import `ToastContainer` and include it within your top level component. Pass configurations as props.
+
+```javascript
+<ToastContainer autoClose={3000} hideProgressBar />
+```
+
+Toast methods have an optional second parameter that allows you to pass it a config object.
+
+If you need a single toast popup to stay open, pass this for the second parameter:
+
+```javascript
+{
+  autoClose: false;
+}
+```
+
+## Async / Await
+
+Async/Await uses promises behind the scenes, so it can easily interact with promise-based code. One benefit of this convention is that functions containing asynchronous code are clearly marked. The async/await convention is syntactic sugar designed to make code easier to read.
+
+Use `await` keyword before calls to asynchronous functions. The function will pause execution and continue when the async call completes. A single function may have multiple awaits. You can save the result of an awaited async request in a variable and then return it.
+
+Any function that uses `await` keyword within must have `async` in its signature. In other words, you **decorate** the function with the `async` keyword. Since await/async uses promises behind the scenes, returning the result of an awaited async call will return a promise.
+
+Because await turns asynchronous calls into synchronous code, you may use try-catch for error handling instead of .then().catch(). The code in the `then` callback becomes the code in the `try` block and the parameter of the `then` callback function is returned to a local variable. The code in the `catch` callback becomes the code in the `catch` block, and the parameter from the `catch` callback parameter becomes the parameter for the catch in the try-catch.
+
+```javascript
+// Without async/await
+const handleSaveCourse = (course) => {
+  saveCourse(course)
+    .then((courseId) => {
+      return courseId;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+// Classic function signature
+async function handleSaveCourse(course) {
+  try {
+    const courseId = await saveCourse(course);
+    return courseId; // Returns a promise
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Arrow function signature
+const handleSaveCourse = async (course) => {
+  // ...same function content as above
+};
+```
