@@ -471,3 +471,67 @@ const handleSaveCourse = async (course) => {
   // ...same function content as above
 };
 ```
+
+## Testing Frameworks and Libraries
+
+There are several JavaScript testing frameworks that let you test your React code and components. Only Jest is covered here. Others are Mocha, Jasmine, Tape, and AVA. All of these frameworks can be used for React, but they can be used for any JavaScript. Each varies on levels of simplicity, configuraton, and footprint.
+
+There are also helper libraries. These libraries can't do the testing on their own, and need a testing framework to use them. Enzyme and React Testing Library are two examples of testing libraries. Both use React Test Utils behind the scenes. React Test Utils is built for React, is low level, and has a verbose API.
+
+### Jest
+
+Jest is Facebook's React testing framework. It is easy to setup and very popular. Jest comes bundled with create-react-app.
+
+Jest has snapshots that lets you create serialized snapshots to protect you from regressions.
+
+### Enzyme
+
+Enzyme is a testing library that uses React Test Utils behind the scenes. It uses JSDOM which is in-memory DOM so it can render coponents without a browser.
+
+Enzyme uses CSS style selectors thanks to Cheerio library which makes use of fast CSS/jQuery style selectors.
+
+CSS style selectors let you select based on HTML element type, HTML class, and HTML id. jQuery uses this style too for its selectors.
+
+### React Testing Library
+
+React Testing Library is similar to Enzyme but has a much smaller API and smaller footprint.
+
+The primary guiding principle for react-testing-library:
+
+> The more your tests resemble the way your software is used, the more confidence they can give you.
+
+## Jest Testing
+
+Add script to package.json.
+
+```json
+"scripts": {
+  "test": "jest"
+}
+```
+
+Name files after the JavaScript file that will be tested. For example, the test for index.js would be index.test.js. Jest automatically finds tests in files that end in .test.js or .spec.js.
+
+`it` takes two parameters: a description of the test, and the callback function that will be the body of the test.
+
+`expect` takes a value then chains other methods such as `toEqual` which take a value. In this way, `expect` can be used to test that values are what you expect. If not, the test fails.
+
+`jest.fn()` creates an empty mock function.
+
+Run the tests with the test script: `npm test`. Passing tests will be green. Failed tests will be red and show the segment of test code that failed.
+
+### Watch Mode
+
+Adding `--watch` to the Jest script will keep Jest running and re-run tests at every save.
+
+> **macOS Note**
+> Watchman must be installed for Jest to work on macOS. Jest uses watchman by default for file watching.
+> `brew install watchmen`
+
+### Boolean Props in JavaScript
+
+In vanilla JavaScript (not TypeScript), the existence of a boolean prop infers truthiness so just listing the name of the prop sets that prop to true.
+
+## Snapshot Test
+
+Snapshots protect from making accidental changes to component output.
