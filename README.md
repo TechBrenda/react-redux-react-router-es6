@@ -554,3 +554,21 @@ The Factory Pattern can be used anywhere, and it makes the test code short and s
 Enzyme's find function accepts CSS selectors. When using selectors for Enzyme `shallow`, they can be React components, not just HTML elements. However, with Enzyme `mount`, the selectors must be HTML elements because the mount is rendered to a DOM so the final result is HTML elements.
 
 Enzyme allows you to target specific components to test so you don't have to rely on snapshot tests for those differences.
+
+Enzyme has a debug function in the return value from shallow function. By calling `debug()` in a console log, you can output the contents of the tested component to the console.
+
+## React Testing Library
+
+Tests are based on what the user sees. This leads to tests that are less brittle than Enzyme's tests. This library was written with accessibility in mind.
+
+The same factory function used in Enzyme `shallow` example can be used in React Testing Library, but instead of `shallow`, use `render`.
+
+The `render` function returns an object with several functions. Reference the [React Testing Library documentation](https://testing-library.com/docs/react-testing-library/api) to find all of these. Use destructuring to get only the functions you need in your test.
+
+There are ways to select components, but you don't need to. React Testing Library functions are designed to test by what the user sees.
+
+React Testing Library has no shallow rendering. Components are always mounted.
+
+Unlike Enzyme, you don't need to call `expect`. With React Testing Library, the assertion is part of your query.
+
+To debug in React Testing Library, destructure the debug function from render and call `debug()` without wrapping in console.log. The output formatting is much nicer than Enzyme: color coding and better line breaks.

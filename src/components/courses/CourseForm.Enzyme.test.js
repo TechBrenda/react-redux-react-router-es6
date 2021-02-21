@@ -29,5 +29,6 @@ it('labels save buttons as "Save" when not saving', () => {
 
 it('labels save button as "Saving..." when saying', () => {
   const wrapper = renderCourseForm({ saving: true });
+  // console.log(wrapper.debug());
   expect(wrapper.find('button').text()).toBe('Saving...');
 });
