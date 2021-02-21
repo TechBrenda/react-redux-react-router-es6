@@ -535,3 +535,22 @@ In vanilla JavaScript (not TypeScript), the existence of a boolean prop infers t
 ## Snapshot Test
 
 Snapshots protect from making accidental changes to component output.
+
+In a Jest test, create a component tree with `renderer.create` from react-test-renderer library. Then expect the tree to match snapshot. This creates a snapshot of the component tree you created. When you run jest test, it passes if the result matches your snapshot and fails if it does not match your snapshot. On failed snapshot tests, you have the option to update your snapshot to the one created by the current test. This can be handy if the change was intentional.
+
+## Enzyme
+
+Create a JavaScript file for configuring Enzyme and reference it in package.json under jest.setupFiles which is an array of file locations.
+
+There are two ways to render a React component for testing with Enzyme:
+
+- `shallow` - Renders single component in isolation. No DOM is created. No child components are rendered. Fast and lightweight.
+- `mount` - Renders component with children. DOM is created in memory via JSDOM, and it can use refs. More realistic test than `shallow`, but requires more mocking to work.
+
+For convenience, you can use the Factory Pattern. Create a factory function at the top of a test file to create the tested component with default props. The function sets a set of default props, and takes an args parameter to allow overriding those props. Then the function calls the tested component with the resulting props and wraps that component in the Enzyme shallow method.
+
+The Factory Pattern can be used anywhere, and it makes the test code short and simple.
+
+Enzyme's find function accepts CSS selectors. When using selectors for Enzyme `shallow`, they can be React components, not just HTML elements. However, with Enzyme `mount`, the selectors must be HTML elements because the mount is rendered to a DOM so the final result is HTML elements.
+
+Enzyme allows you to target specific components to test so you don't have to rely on snapshot tests for those differences.
