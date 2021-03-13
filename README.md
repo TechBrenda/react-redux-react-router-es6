@@ -628,3 +628,11 @@ Mock two things to be able to unit test thunks:
 The redux-mock-store provides the configureMockStore which requires middleware. For the purpose of testing thunks, it only needs thunk inside an array.
 
 When testing thunks, the goal is to assert that the actions are created.
+
+### Test Reducers
+
+Reducers are pure functions so they are the easiest to test.
+
+> Given this input, Assert this output.
+
+To test reducers, you don't need the full state, only the properties you test. Leave out properties that are not relevant to the test so that the tests are more readable.
