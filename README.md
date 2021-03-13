@@ -572,3 +572,44 @@ React Testing Library has no shallow rendering. Components are always mounted.
 Unlike Enzyme, you don't need to call `expect`. With React Testing Library, the assertion is part of your query.
 
 To debug in React Testing Library, destructure the debug function from render and call `debug()` without wrapping in console.log. The output formatting is much nicer than Enzyme: color coding and better line breaks.
+
+## Testing Redux
+
+Test for these using Jest.
+
+- connected components
+- action creators
+- thunks
+- reducers
+- store
+
+Testing the store can also be considered an integration test.
+
+Two goals when testing Redux:
+
+- test markup
+- test behavior
+
+Container components will have minimal markup testing for Redux. Markup testing will focus on presentation components. Markup in container components should be limited to references to child components. Redux testing for container components will focus on behavior.
+
+### connect
+
+Testing container components with Redux can be a challenge due to it being wrapped in the call to connect. The connect function runs within the Redux Provider. Container components export the component wrapped with connect. There are two options to handle this:
+
+1. Wrap with `<Provider>`
+
+Reference the store and pass it the Provider to compose your component under the test. The advantage of this approach is that you can create a custom store for the test. This approach is useful if you want to test the Redux related portions of your component.
+
+2. Add named export for unconnected component.
+
+This is simpler and recommended by the course instructor. Use this approach if you just want to test your component's rendering and local state related behaviors.
+
+When exporting the component as a named export, you will have to import it inside curly braces to use the named export instead of the default export. However, eslint does not like named exports being named the same as default exports (because it's confusing!) so you'll need this next to any line where the default import is used:
+
+```javascript
+// esline-disable-line import/no-named-as-default
+```
+
+A better way to handle the same name issue would be to separate the component file from the call to the connect function. Instead of calling connect in the component file, create a separate container file (named after the component with `.container.js` at the end of the file name). Then create an index.js file in the component folder to import the connected component from the container file and export for other containers to import. This allows you to use the connected component in your app and test the unconnected component in your tests.
+
+https://gist.github.com/TechBrenda/0674be6731b1ca0c02b904056efac79b
