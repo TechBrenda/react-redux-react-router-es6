@@ -617,3 +617,14 @@ https://gist.github.com/TechBrenda/0674be6731b1ca0c02b904056efac79b
 ### Test Action Creators
 
 The goal of testing action creators is to assure that an action creator returns the expected action. These are very simple tests as action creators are simple functions.
+
+### Test Thunks
+
+Mock two things to be able to unit test thunks:
+
+- store: redux-mock-store
+- HTTP calls: fetch-mock
+
+The redux-mock-store provides the configureMockStore which requires middleware. For the purpose of testing thunks, it only needs thunk inside an array.
+
+When testing thunks, the goal is to assert that the actions are created.
