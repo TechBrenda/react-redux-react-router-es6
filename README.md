@@ -592,9 +592,9 @@ Two goals when testing Redux:
 
 Container components will have minimal markup testing for Redux. Markup testing will focus on presentation components. Markup in container components should be limited to references to child components. Redux testing for container components will focus on behavior.
 
-### connect
+### Test Connected Components
 
-Testing container components with Redux can be a challenge due to it being wrapped in the call to connect. The connect function runs within the Redux Provider. Container components export the component wrapped with connect. There are two options to handle this:
+Testing container components with Redux can be a challenge due to it being wrapped in the call to `connect`. The `connect` function runs within the Redux Provider. Container components export the component wrapped with `connect`. There are two options to handle this:
 
 1. Wrap with `<Provider>`
 
@@ -613,3 +613,7 @@ When exporting the component as a named export, you will have to import it insid
 A better way to handle the same name issue would be to separate the component file from the call to the connect function. Instead of calling connect in the component file, create a separate container file (named after the component with `.container.js` at the end of the file name). Then create an index.js file in the component folder to import the connected component from the container file and export for other containers to import. This allows you to use the connected component in your app and test the unconnected component in your tests.
 
 https://gist.github.com/TechBrenda/0674be6731b1ca0c02b904056efac79b
+
+### Test Action Creators
+
+The goal of testing action creators is to assure that an action creator returns the expected action. These are very simple tests as action creators are simple functions.
