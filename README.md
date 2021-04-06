@@ -678,3 +678,17 @@ Scripts may call other scripts. Use `run-p` to run several scripts in parallel. 
 Scripts may be named with a colon to associate a task with an action. This naming convention is used for helper scripts that will be run in a pre- or post- script. The name of the base script that the helper script should be run with would be the "action" while the specific purpose of helper would be the "task".
 
 The order of task and action should be determined by readability. For example, the `start` script is used to start the app in development mode. There are two helper scripts associated named `start:dev` and `start:api`. In contrast, the `build` script has two helper scripts named `clean:build` and `serve:build`. The action is "build" but in the helper scripts, the action is treated as more of a noun than a verb. The idea is to use the colon to associate the base action with a single word that describes what the helper script does. There is no single set of logic to determine this naming convention.
+
+# Final Challenges
+
+1. Author administration - Don't allow deleting any author who has a course.
+2. Filter course list
+3. Hide empty course list
+4. Unsaved changes message - when attempting to leave Manage Course form with unsaved changes
+5. Enhance validation - Be more strict about the data a use can enter.
+6. Handle 404 on edit course - Hint: add logic to mapStateToProps.
+7. Show number of courses in Header - Redux makes this trivial
+8. Pagination - add to course table
+9. Sort course table - Sort by title by default so that the last record updated isn't always placed at the bottom. Additionally, add dropdowns at the top that let you sort by different columns. Hint: use mapStateToProps.
+10. Revert abandoned changes - keep course history so that users may undo changes even ever saving.
+11. Bonus Challenge: Update React and Redux to the latest version and actually make everything work.
