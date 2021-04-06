@@ -636,3 +636,7 @@ Reducers are pure functions so they are the easiest to test.
 > Given this input, Assert this output.
 
 To test reducers, you don't need the full state, only the properties you test. Leave out properties that are not relevant to the test so that the tests are more readable.
+
+### Test Redux Store
+
+Testing the store is an integration test. It tests the integration of the action creators, store, and reducer.
