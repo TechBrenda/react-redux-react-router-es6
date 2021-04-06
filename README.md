@@ -640,3 +640,41 @@ To test reducers, you don't need the full state, only the properties you test. L
 ### Test Redux Store
 
 Testing the store is an integration test. It tests the integration of the action creators, store, and reducer.
+
+## Production Build
+
+In development, `npm start` runs the code out of the `src` directory.
+
+For production, the code needs to be published with one file each for HTML, CSS, and JavaScript. These files will be provided to the web client to load the page in the browser. The command `npm build` will create these files in minified form and place them in the `build` directory. That `build` directory can be then be deployed to a web server for hosting.
+
+The goal for production is to bundle the application into three files within the `build` directory:
+
+- index.html
+- bundle.js
+- styles.css
+
+Production build process:
+
+- Lint and run tests
+- Bundle and minify JS and CSS
+- Generate JS and CSS sourcemaps
+- Exclude dev-specific concerns (such as PropType validation)
+- Build React in production mode
+- Generate bundle report - see app's size and list what packages are in the build
+- Run the build on a local webserver
+
+In webpack config, loaders run from the bottom up. This means `postcss-loader` will load before `css-loader`.
+
+The web server that hosts the app production code needs to direct all requests to index.html so that React Router can handle all requests.
+
+Add the build folder to `.gitignore`. There is no need to check this content into source control since it is dynamically generated. If you have need to versions deployments to production, use a deployment repository, not Git.
+
+### Scripts in package.json
+
+The `package.json` scripts section uses a convention where naming a script after another script with the prefix of `pre-` or `post-` will automatically run that script before (pre) or after (post) the base script. That is why these pre- and post- scripts are defined but do not appear to be used anywhere.
+
+Scripts may call other scripts. Use `run-p` to run several scripts in parallel. Remember, you only need to call the base script and any pre- or post- scripts named after the base script will be called in the correct order.
+
+Scripts may be named with a colon to associate a task with an action. This naming convention is used for helper scripts that will be run in a pre- or post- script. The name of the base script that the helper script should be run with would be the "action" while the specific purpose of helper would be the "task".
+
+The order of task and action should be determined by readability. For example, the `start` script is used to start the app in development mode. There are two helper scripts associated named `start:dev` and `start:api`. In contrast, the `build` script has two helper scripts named `clean:build` and `serve:build`. The action is "build" but in the helper scripts, the action is treated as more of a noun than a verb. The idea is to use the colon to associate the base action with a single word that describes what the helper script does. There is no single set of logic to determine this naming convention.
